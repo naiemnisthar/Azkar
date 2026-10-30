@@ -6,6 +6,16 @@
 <title>أذكار — Azkar</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<script>
+  (function(){
+    var t = null;
+    try { t = localStorage.getItem('azkar-theme'); } catch(e){}
+    if (t !== 'dark' && t !== 'light') {
+      t = (window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+    }
+    document.documentElement.setAttribute('data-theme', t);
+  })();
+</script>
 <style>
   :root{
     --bg-1:#efe9f8;
@@ -20,7 +30,39 @@
     --good:#63c99b;
     --shadow-d: rgba(148,132,199,0.55);
     --shadow-l: rgba(255,255,255,0.9);
+    --track: rgba(148,132,199,.25);
+    --morning-ink:#c9752b;
+    --evening-ink:#5b4bc4;
+    color-scheme: light;
   }
+  :root[data-theme="dark"]{
+    --bg-1:#1f1b2e;
+    --bg-2:#2a2540;
+    --clay:#29243d;
+    --ink:#ece8fa;
+    --ink-soft:#a59ec2;
+    --shadow-d: rgba(6,4,14,0.75);
+    --shadow-l: rgba(92,82,138,0.32);
+    --track: rgba(255,255,255,.08);
+    --morning-ink:#ffb36e;
+    --evening-ink:#b8acff;
+    color-scheme: dark;
+  }
+  body, .phone, .zikr-card, .back-btn, .counter-btn, .progress-wrap, .theme-btn{ transition: background-color .3s ease, color .3s ease, box-shadow .3s ease; }
+
+  .theme-btn{
+    position:absolute; top:22px; left:18px; z-index:5;
+    width:42px; height:42px; border-radius:16px; border:none;
+    background: var(--clay); color: var(--ink-soft);
+    box-shadow: 6px 6px 12px var(--shadow-d), -5px -5px 12px var(--shadow-l);
+    display:flex; align-items:center; justify-content:center; cursor:pointer;
+  }
+  .theme-btn:active{ box-shadow: inset 4px 4px 8px var(--shadow-d), inset -4px -4px 8px var(--shadow-l); }
+  .theme-btn:focus-visible, .back-btn:focus-visible, .counter-btn:focus-visible, .clay-btn:focus-visible{ outline:2px solid var(--evening-ink); outline-offset:3px; }
+  .theme-btn svg{ width:20px; height:20px; }
+  .theme-btn .icon-sun{ display:none; }
+  :root[data-theme="dark"] .theme-btn .icon-sun{ display:block; }
+  :root[data-theme="dark"] .theme-btn .icon-moon{ display:none; }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
   body{
@@ -89,14 +131,13 @@
     background: radial-gradient(circle at 32% 28%, var(--sun-1), var(--sun-2) 75%);
     box-shadow:
       10px 10px 22px rgba(214,120,40,0.45),
-      -8px -8px 20px rgba(255,255,255,0.85),
-      inset 0 0 0 rgba(0,0,0,0);
+      -8px -8px 20px var(--shadow-l);
   }
   .moon{
     background: radial-gradient(circle at 32% 28%, var(--moon-1), var(--moon-2) 75%);
     box-shadow:
       10px 10px 22px rgba(83,63,168,0.45),
-      -8px -8px 20px rgba(255,255,255,0.85);
+      -8px -8px 20px var(--shadow-l);
   }
 
   .home-footer{ text-align:center; font-size:11px; color:var(--ink-soft); padding-bottom:4px; }
@@ -108,7 +149,7 @@
     background: var(--clay);
     box-shadow: 6px 6px 12px var(--shadow-d), -5px -5px 12px var(--shadow-l);
     display:flex; align-items:center; justify-content:center; cursor:pointer;
-    flex-shrink:0;
+    flex-shrink:0; color: var(--ink-soft);
   }
   .back-btn:active{ box-shadow: inset 4px 4px 8px var(--shadow-d), inset -4px -4px 8px var(--shadow-l); }
   .back-btn svg{ width:18px; height:18px; }
@@ -123,7 +164,7 @@
     box-shadow: inset 5px 5px 10px var(--shadow-d), inset -5px -5px 10px var(--shadow-l);
   }
   .progress-row{ display:flex; justify-content:space-between; font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
-  .progress-track{ height:10px; border-radius:8px; background:rgba(148,132,199,.25); overflow:hidden; }
+  .progress-track{ height:10px; border-radius:8px; background:var(--track); overflow:hidden; }
   .progress-fill{ height:100%; border-radius:8px; transition:width .3s ease; }
   .progress-fill.morning{ background: linear-gradient(90deg, var(--sun-1), var(--sun-2)); }
   .progress-fill.evening{ background: linear-gradient(90deg, var(--moon-1), var(--moon-2)); }
@@ -158,9 +199,9 @@
     cursor:pointer; transition: transform .1s ease, box-shadow .15s ease, background .2s ease, color .2s ease;
   }
   .counter-btn:active{ transform:scale(.9); box-shadow: inset 4px 4px 9px var(--shadow-d), inset -4px -4px 9px var(--shadow-l); }
-  .counter-btn.morning-c{ color:#c9752b; }
-  .counter-btn.evening-c{ color:#5b4bc4; }
-  .counter-btn.finished{ background: linear-gradient(145deg, var(--good), #4bb583); color:#fff; box-shadow: 5px 5px 10px rgba(70,160,120,.5), -4px -4px 10px rgba(255,255,255,.7); }
+  .counter-btn.morning-c{ color:var(--morning-ink); }
+  .counter-btn.evening-c{ color:var(--evening-ink); }
+  .counter-btn.finished{ background: linear-gradient(145deg, var(--good), #4bb583); color:#fff; box-shadow: 5px 5px 10px rgba(70,160,120,.5), -4px -4px 10px var(--shadow-l); }
 
   .reset-row{ text-align:center; padding-top:8px; }
   .reset-btn{
@@ -173,6 +214,11 @@
 <body>
 
 <div class="phone">
+
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Switch to dark theme">
+    <svg class="icon-moon" viewBox="0 0 24 24" fill="currentColor"><path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"/></svg>
+    <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4.5" fill="currentColor" stroke="none"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/><line x1="4.9" y1="4.9" x2="6.3" y2="6.3"/><line x1="17.7" y1="17.7" x2="19.1" y2="19.1"/><line x1="4.9" y1="19.1" x2="6.3" y2="17.7"/><line x1="17.7" y1="6.3" x2="19.1" y2="4.9"/></svg>
+  </button>
 
   <!-- HOME SCREEN -->
   <div class="screen active" id="home">
@@ -199,7 +245,7 @@
   <div class="screen" id="morning">
     <div class="list-header">
       <button class="back-btn" onclick="goHome()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#7c7396" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
         <p class="list-title">أذكار الصباح</p>
@@ -218,7 +264,7 @@
   <div class="screen" id="evening">
     <div class="list-header">
       <button class="back-btn" onclick="goHome()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="#7c7396" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
       </button>
       <div>
         <p class="list-title">أذكار المساء</p>
@@ -381,6 +427,18 @@ function goHome(){
   document.getElementById('evening').classList.remove('active');
   document.getElementById('home').classList.add('active');
 }
+
+function setThemeLabel(){
+  const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+  document.getElementById('theme-btn').setAttribute('aria-label', dark ? 'Switch to light theme' : 'Switch to dark theme');
+}
+function toggleTheme(){
+  const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('azkar-theme', next); } catch(e){}
+  setThemeLabel();
+}
+setThemeLabel();
 
 buildList('morning');
 buildList('evening');
